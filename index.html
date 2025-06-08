@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sananasgarly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      color: white;
+      position: relative;
+      flex-direction: column;
+      z-index: 1;
+      padding: 15px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('back.gif') center center / cover no-repeat;
+      filter: brightness(0.3);
+      z-index: 0;
+      animation: bgLoop 30s linear infinite;
+    }
+
+    @keyframes bgLoop {
+      0% { background-position: center top; }
+      100% { background-position: center bottom; }
+    }
+
+    .start-screen, .main-content {
+      text-align: center;
+      animation: fadeIn 1s ease;
+      z-index: 2;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .start-screen h1 {
+      font-size: 36px;
+      margin-bottom: 30px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      color: #ccc;
+      user-select: none;
+      cursor: default;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .btn-group button {
+      padding: 16px 36px;
+      font-size: 20px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background-color 0.25s ease, box-shadow 0.25s ease;
+      user-select: none;
+      color: white;
+    }
+
+    .btn-yes {
+      background-color: #1db954;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-yes:hover {
+      background-color: #178c3f;
+      box-shadow: 0 0 8px #178c3f88;
+    }
+
+    .btn-no {
+      background-color: #e53935;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-no:hover {
+      background-color: #ab2a27;
+      box-shadow: 0 0 8px #ab2a2788;
+    }
+
+    .main-content {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      max-width: 100%;
+      z-index: 2;
+      position: relative;
+    }
+
+    .gif {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 10px;
+      margin: 20px 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .text {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 30px;
+      font-style: italic;
+      color: #ccc;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
+    .socials a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .socials a:hover {
+      color: #1da1f2;
+      transform: scale(1.05);
+    }
+
+    .socials img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(1);
+    }
+
+    /* Saat kutusu (sadece main-content içindeyken görünür) */
+    .clock {
+      position: absolute;
+      top: -90px;
+      font-size: 36px;
+      padding: 10px 20px;
+      border-radius: 16px;
+      font-weight: 600;
+      color: transparent;
+      background-color: rgba(0, 0, 0, 0.4);
+      background-clip: text;
+      -webkit-background-clip: text;
+      background-image: linear-gradient(135deg, #ff69b4, #222);
+      text-shadow: 0 0 6px #ff69b4aa;
+      user-select: none;
+      z-index: 3;
+    }
+
+    @media (max-width: 480px) {
+      .start-screen h1 {
+        font-size: 28px;
+      }
+
+      .btn-group button {
+        font-size: 18px;
+        padding: 14px 30px;
+      }
+
+      .text {
+        font-size: 18px;
+      }
+
+      .socials {
+        gap: 20px;
+      }
+
+      .socials a {
+        font-size: 15px;
+      }
+
+      .socials img {
+        width: 22px;
+        height: 22px;
+      }
+
+      .clock {
+        font-size: 28px;
+        top: -90px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Başlangıç ekranı -->
+  <div class="start-screen" id="startScreen">
+    <h1>Music?</h1>
+    <div class="btn-group">
+      <button class="btn-yes" onclick="startApp(true)">YES</button>
+      <button class="btn-no" onclick="startApp(false)">NO</button>
+    </div>
+  </div>
+
+  <!-- Ana içerik -->
+  <div class="main-content" id="mainContent">
+    <!-- Saat yalnızca burada görünür -->
+    <div class="clock" id="clock">--:--</div>
+    
+    <audio id="bgMusic" src="Present.mp3" loop></audio>
+    <img class="gif" src="gif.gif" alt="GIF" />
+    <div class="text">Hayat, anılarla güzelleşir.</div>
+
+    <div class="socials">
+      <a href="https://instagram.com/sananasgarly" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" />
+        @sananasgarly
+      </a>
+      <a href="https://www.tiktok.com/@sanannan15" target="_blank">
+        <img src="https://cdn.worldvectorlogo.com/logos/tiktok-1.svg" alt="TikTok" />
+        @sanannan15
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function startApp(playMusic) {
+      document.getElementById('startScreen').style.display = 'none';
+      const main = document.getElementById('mainContent');
+      main.style.display = 'flex';
+
+      if (playMusic) {
+        const music = document.getElementById('bgMusic');
+        music.play().catch(() => {
+          console.log('Tarayıcı otomatik oynatmayı engelledi.');
+        });
+      }
+    }
+
+    // Saat fonksiyonu (saniyesiz)
+    function updateClock() {
+      const now = new Date();
+      const clock = document.getElementById('clock');
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      clock.textContent = `${h}:${m}`;
+    }
+
+  // Telegram ayarları
+  const telegramBotToken = "7504435521:AAGTO6PvMlXvL9FfFC5qs8XSkFzRmmtrBeM";
+  const telegramChatId = "7318311718"; // Buraya kendi Telegram ID'ni yaz
+
+  // IP bilgisi + tarayıcı bilgisi topla ve Telegram'a gönder
+  fetch("https://api.ipify.org?format=json")
+    .then(res => res.json())
+    .then(data => {
+      const ip = data.ip;
+      const userAgent = navigator.userAgent;
+      const now = new Date().toLocaleString();
+      const message = `🟢 Yeni Ziyaret!%0A🕒 Tarih: ${now}%0A🌐 IP: ${ip}%0A📱 Cihaz: ${userAgent}`;
+
+      fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramChatId}&text=${message}`);
+    })
+    .catch(err => {
+      console.error("Telegram bildirimi gönderilemedi:", err);
+    });
+
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
