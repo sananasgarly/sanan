@@ -83,8 +83,8 @@
       cursor: pointer;
       transition: background-color 0.25s ease, box-shadow 0.25s ease;
       user-select: none;
-      color: white;
-    }
+      color: white; /* ne baxirsan? */
+    } 
 
     .btn-yes {
       background-color: #1db954;
@@ -123,15 +123,20 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     }
 
-    .text {
-      font-size: 20px;
-      font-weight: 500;
-      margin-bottom: 30px;
-      font-style: italic;
-      color: #ccc;
-      text-align: center;
-      padding: 0 10px;
-    }
+  .text {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px; /* Bunu azaltabiliriz */
+  font-style: italic;
+  color: #ccc;
+  text-align: center;
+  padding: 0 10px;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
     .socials {
       display: flex;
@@ -233,8 +238,7 @@
     
     <audio id="bgMusic" src="Present.mp3" loop></audio>
     <img class="gif" src="gif.gif" alt="GIF" />
-    <div class="text">Hayat, anılarla güzelleşir.</div>
-
+    <div class="text" id="randomText"></div>
     <div class="socials">
       <a href="https://instagram.com/sananasgarly" target="_blank">
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" />
@@ -259,6 +263,8 @@
           console.log('Tarayıcı otomatik oynatmayı engelledi.');
         });
       }
+
+      showRandomText();
     }
 
     // Saat fonksiyonu (saniyesiz)
@@ -270,25 +276,21 @@
       clock.textContent = `${h}:${m}`;
     }
 
-  // Telegram ayarları
-  const telegramBotToken = "7504435521:AAGTO6PvMlXvL9FfFC5qs8XSkFzRmmtrBeM";
-  const telegramChatId = "7318311718"; // Buraya kendi Telegram ID'ni yaz
+    // Rastgele metinler dizisi
+    const texts = [
+      "Ben ölmek istiyorum sayın albayım, ölmek. Bir yandan da ölümümün nasıl karşılanacağını seyretmek istiyorum. Tehlikeli oyunlar oynamak istiyor insan; bir yandan da kılına zarar gelsin istemiyor.",
+      "Gözleriniz çok ses çıkarıyor albayım.",
+      "Delirmek Albayım… Kim bilir ne güzel şey. Düşünsene aklın yok bi kere… Beni hep bu aklım mahvetti Albayım.",
+      "Hevesimi kırdılar. Küçükken de kırılmıştı bi kere. Sonra kırık çıkıkçıya götürdüler, bir türlü düzelmedi. Hevesim yanlış kaynadı Albayım. Hep yanlış şeylere heves ettim.",
+      "Anlamlar Albayım. Bazı kelimelere sığmıyor. Ayrılık mesela... Sevenlerin sınavı diyebilir miyiz?",
+      "Ya Albayım, dünya mesela... Aşağılık yer demek. Aşağı. Ya da aşağılıkların yaşadığı yer demek. Dünya çirkin, biz güzeliz Albayım."
+    ];
 
-  // IP bilgisi + tarayıcı bilgisi topla ve Telegram'a gönder
-  fetch("https://api.ipify.org?format=json")
-    .then(res => res.json())
-    .then(data => {
-      const ip = data.ip;
-      const userAgent = navigator.userAgent;
-      const now = new Date().toLocaleString();
-      const message = `🟢 Yeni Ziyaret!%0A🕒 Tarih: ${now}%0A🌐 IP: ${ip}%0A📱 Cihaz: ${userAgent}`;
-
-      fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramChatId}&text=${message}`);
-    })
-    .catch(err => {
-      console.error("Telegram bildirimi gönderilemedi:", err);
-    });
-
+    // Rastgele metni göster
+    function showRandomText() {
+      const idx = Math.floor(Math.random() * texts.length);
+      document.getElementById('randomText').textContent = texts[idx];
+    }
 
     setInterval(updateClock, 1000);
     updateClock();
